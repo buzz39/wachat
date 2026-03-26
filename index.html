@@ -435,6 +435,28 @@ body {
   border: 2px solid white;
 }
 
+/* ═══ GET CODE BUTTON ═══ */
+.get-code-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 1rem;
+}
+.get-code-btn:hover { background: var(--green-dark); }
+.get-code-btn:active { transform: scale(0.98); }
+
 /* ═══ CODE TABS ═══ */
 .code-tab {
   display: flex;
@@ -799,7 +821,7 @@ footer {
     </div>
 
     <!-- CODE OUTPUT -->
-    <div class="code-section">
+    <div class="code-section" id="codeSection" style="display:none">
       <div class="code-tab">
         <button class="tab-btn" onclick="showTab('selfhosted', this)">Self-Hosted Code</button>
         <button class="tab-btn active" onclick="showTab('hosted', this)">Hosted Script (Recommended)</button>
@@ -815,6 +837,10 @@ footer {
         <pre id="codeOutput"></pre>
       </div>
     </div>
+    <button class="get-code-btn" id="getCodeBtn" onclick="document.getElementById('codeSection').style.display='block';this.style.display='none';updatePreview();">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Get Embed Code
+    </button>
   </div>
 </section>
 
@@ -976,15 +1002,17 @@ function updatePreview() {
   const autoOpen = document.getElementById('toggleAutoOpen').classList.contains('active');
 
   // Update preview
-  document.getElementById('fabPreview').style.background = color;
-  document.getElementById('popupHeader').style.background = darkColor;
-  document.getElementById('popupCta').style.background = color;
-  document.getElementById('popupName').textContent = name;
-  document.getElementById('popupTagline').textContent = tagline;
-  document.getElementById('popupMessage').textContent = msg;
-  document.getElementById('popupCtaText').textContent = cta;
-  document.getElementById('fakeLogo').textContent = name;
-  document.getElementById('badgePreview').style.display = showBadge ? 'flex' : 'none';
+  try {
+    document.getElementById('fabPreview').style.background = color;
+    document.getElementById('popupHeader').style.background = darkColor;
+    document.getElementById('popupCta').style.background = color;
+    document.getElementById('popupName').textContent = name;
+    document.getElementById('popupTagline').textContent = tagline;
+    document.getElementById('popupMessage').textContent = msg;
+    document.getElementById('popupCtaText').textContent = cta;
+    document.getElementById('fakeLogo').textContent = name;
+    document.getElementById('badgePreview').style.display = showBadge ? 'flex' : 'none';
+  } catch(e) { console.warn('Preview update error:', e); }
 
   // Always show popup in preview so user can see changes in real-time
   document.getElementById('popupPreview').classList.remove('hidden');
