@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAChat.in — Free WhatsApp Widget Generator for Indian Businesses</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg: #FAFAF8;
+  --bg2: #F0EFEB;
+  --bg3: #E8E7E2;
+  --text: #1A1A18;
+  --text2: #5C5B56;
+  --text3: #8A8983;
+  --green: #25D366;
+  --green-dark: #128C7E;
+  --green-light: #DCF8C6;
+  --accent: #075E54;
+  --border: rgba(0,0,0,0.08);
+  --white: #ffffff;
+  --coral: #E8593C;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+  background: linear-gradient(180deg, #E8F5E9 0%, var(--bg) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: -20%;
+  width: 140%; height: 140%;
+  background: radial-gradient(ellipse at 30% 20%, rgba(37,211,102,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 80%, rgba(7,94,84,0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+.hero-badge .dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  position: relative;
+  letter-spacing: -0.02em;
+}
+.hero h1 em { font-style: italic; color: var(--green-dark) }
+.hero p {
+  font-size: 1.05rem;
+  color: var(--text2);
+  max-width: 520px;
+  margin: 0 auto 2rem;
+}
+
+/* ═══ BUILDER ═══ */
+.builder {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+@media(max-width:768px) { .builder { grid-template-columns: 1fr; } }
+
+.config-panel {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 2rem;
+}
+.config-panel h2 {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 0.25rem;
+}
+.config-panel .subtitle { font-size: 0.85rem; color: var(--text3); margin-bottom: 1.5rem }
+
+.form-group { margin-bottom: 1.25rem }
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 0.4rem;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(37,211,102,0.12);
+}
+.form-group textarea { resize: vertical; min-height: 60px }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem }
+
+.color-row { display: flex; align-items: center; gap: 10px }
+.color-swatch {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+.color-swatch input {
+  position: absolute;
+  inset: -8px;
+  width: 52px; height: 52px;
+  border: none; padding: 0;
+  cursor: pointer;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+.toggle-row span { font-size: 0.9rem; color: var(--text) }
+.toggle {
+  width: 44px; height: 24px;
+  border-radius: 12px;
+  background: var(--bg3);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.toggle.active { background: var(--green) }
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 20px; height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+.toggle.active::after { transform: translateX(20px) }
+
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.25rem 0;
+}
+
+/* ═══ PREVIEW ═══ */
+.preview-panel {
+  position: sticky;
+  top: 2rem;
+}
+.preview-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.preview-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.preview-header h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.preview-device {
+  display: flex;
+  gap: 6px;
+}
+.preview-device button {
+  padding: 4px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--sans);
+  color: var(--text2);
+}
+.preview-device button.active { background: var(--text); color: white; border-color: var(--text) }
+
+.preview-area {
+  padding: 2rem;
+  min-height: 400px;
+  background: var(--bg2);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: relative;
+  transition: all 0.3s;
+}
+.preview-area.mobile-view {
+  max-width: 375px;
+  margin: 1rem auto;
+  min-height: 500px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Fake website in preview */
+.fake-site {
+  position: absolute;
+  inset: 0;
+  padding: 1.5rem;
+  font-size: 0.75rem;
+  color: var(--text3);
+  pointer-events: none;
+}
+.fake-nav {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+.fake-logo { font-weight: 700; font-size: 0.85rem; color: var(--text2) }
+.fake-links { display: flex; gap: 12px }
+.fake-line { height: 8px; background: var(--bg3); border-radius: 4px; margin-bottom: 8px }
+
+/* ═══ WIDGET PREVIEW ELEMENTS ═══ */
+.wa-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  position: relative;
+  z-index: 10;
+}
+.wa-fab:hover { transform: scale(1.08); box-shadow: 0 6px 24px rgba(0,0,0,0.2) }
+.wa-fab svg { width: 28px; height: 28px; fill: white }
+
+.wa-popup {
+  position: absolute;
+  bottom: 72px;
+  right: 0;
+  width: 320px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transform-origin: bottom right;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s;
+  z-index: 20;
+}
+.wa-popup.hidden { transform: scale(0.8); opacity: 0; pointer-events: none }
+
+.wa-popup-header {
+  padding: 18px 20px;
+  color: white;
+  position: relative;
+}
+.wa-popup-header .biz-name { font-weight: 600; font-size: 1rem; margin-bottom: 2px }
+.wa-popup-header .biz-tagline { font-size: 0.8rem; opacity: 0.85 }
+.wa-popup-header .close-btn {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.wa-popup-body {
+  padding: 16px 20px;
+  background: #E5DDD5;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5bfb5' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.wa-message {
+  background: white;
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 8px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  max-width: 260px;
+  color: #303030;
+}
+.wa-message .time { font-size: 0.65rem; color: #999; text-align: right; margin-top: 4px }
+
+.wa-popup-footer {
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #eee;
+}
+.wa-cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.wa-cta-btn:hover { opacity: 0.9 }
+.wa-cta-btn svg { width: 18px; height: 18px; fill: white }
+
+/* Notification badge */
+.wa-badge {
+  position: absolute;
+  top: -4px; right: -4px;
+  width: 20px; height: 20px;
+  background: var(--coral);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* ═══ CODE OUTPUT ═══ */
+.code-section {
+  margin-top: 1.5rem;
+}
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.code-header h3 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: var(--green-dark) }
+.copy-btn.copied { background: var(--accent) }
+
+.code-box {
+  background: #1a1a2e;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  position: relative;
+}
+.code-box pre {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: #c7d2fe;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.code-box .tag { color: #f472b6 }
+.code-box .attr { color: #67e8f9 }
+.code-box .val { color: #86efac }
+.code-box .comment { color: #6b7280 }
+
+/* ═══ FEATURES ═══ */
+.features {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+.features h2 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.features .tagline { text-align: center; color: var(--text2); margin-bottom: 2.5rem }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.06) }
+.feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+.feature-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem }
+.feature-card p { font-size: 0.82rem; color: var(--text2); line-height: 1.5 }
+
+/* ═══ PRICING ═══ */
+.pricing {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+.pricing h2 {
+  font-family: var(--serif);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+}
+.price-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  position: relative;
+}
+.price-card.featured {
+  border: 2px solid var(--green);
+  box-shadow: 0 8px 32px rgba(37,211,102,0.1);
+}
+.price-card .popular {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 14px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.price-card .tier { font-size: 0.85rem; font-weight: 600; color: var(--text2); margin-bottom: 0.5rem }
+.price-card .amount { font-family: var(--serif); font-size: 2.5rem; margin-bottom: 0.25rem }
+.price-card .amount span { font-size: 1rem; color: var(--text3) }
+.price-card .desc { font-size: 0.82rem; color: var(--text3); margin-bottom: 1.25rem }
+.price-card ul { list-style: none; margin-bottom: 1.5rem }
+.price-card li {
+  font-size: 0.85rem;
+  padding: 6px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.price-card li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0 }
+.price-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.price-btn-primary { background: var(--green); color: white; border: none }
+.price-btn-primary:hover { background: var(--green-dark) }
+.price-btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border) }
+.price-btn-outline:hover { background: var(--bg) }
+
+/* ═══ FOOTER ═══ */
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--text3);
+}
+
+.hidden { display: none !important }
+
+/* ═══ PREMIUM BADGE ═══ */
+.pro-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #F59E0B, #EF4444);
+  color: white;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span> 100% Free — No signup required</div>
+  <h1>WhatsApp widget for<br>your <em>Indian</em> business</h1>
+  <p>Generate a beautiful, fast-loading WhatsApp chat widget in 60 seconds. Self-hosted code — no external dependencies, no branding watermark.</p>
+</section>
+
+<!-- BUILDER -->
+<section class="builder">
+  <div class="config-panel">
+    <h2>Build your widget</h2>
+    <p class="subtitle">Customize everything. Preview live on the right.</p>
+
+    <div class="form-group">
+      <label>WhatsApp number (with country code)</label>
+      <input type="text" id="waNumber" value="919876543210" placeholder="e.g. 919876543210" oninput="updatePreview()">
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label>Business name</label>
+        <input type="text" id="bizName" value="PowerPulse Gym" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>Tagline</label>
+        <input type="text" id="bizTagline" value="Typically replies within minutes" oninput="updatePreview()">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Welcome message</label>
+      <textarea id="welcomeMsg" oninput="updatePreview()">Hey there! 💪 Welcome to PowerPulse Gym. How can we help you today?</textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Pre-filled message (sent by visitor)</label>
+      <input type="text" id="prefillMsg" value="Hi! I'd like to know about your gym membership plans." oninput="updatePreview()">
+    </div>
+
+    <div class="form-group">
+      <label>CTA button text</label>
+      <input type="text" id="ctaText" value="Start chat" oninput="updatePreview()">
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="row">
+      <div class="form-group">
+        <label>Brand color</label>
+        <div class="color-row">
+          <div class="color-swatch" id="colorPreview" style="background:#25D366">
+            <input type="color" id="brandColor" value="#25D366" oninput="updateColor(this.value)">
+          </div>
+          <input type="text" id="brandColorText" value="#25D366" style="flex:1" oninput="updateColorFromText(this.value)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Position</label>
+        <select id="position" onchange="updatePreview()">
+          <option value="right">Bottom right</option>
+          <option value="left">Bottom left</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toggle-row">
+      <span>Show notification badge</span>
+      <div class="toggle active" id="toggleBadge" onclick="toggleSwitch(this); updatePreview()"></div>
+    </div>
+
+    <div class="toggle-row">
+      <span>Show chat popup on load</span>
+      <div class="toggle" id="toggleAutoOpen" onclick="toggleSwitch(this); updatePreview()"></div>
+    </div>
+
+    <div class="toggle-row">
+      <span>Show tooltip on hover</span>
+      <div class="toggle active" id="toggleTooltip" onclick="toggleSwitch(this); updatePreview()"></div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="form-group">
+      <label>Widget style</label>
+      <select id="widgetStyle" onchange="updatePreview()">
+        <option value="fab">Floating button (FAB)</option>
+        <option value="bar">Bottom bar</option>
+        <option value="pill">Pill with text</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview-panel">
+    <div class="preview-card">
+      <div class="preview-header">
+        <h3>Live preview</h3>
+        <div class="preview-device">
+          <button class="active" onclick="setDevice('desktop', this)">Desktop</button>
+          <button onclick="setDevice('mobile', this)">Mobile</button>
+        </div>
+      </div>
+      <div class="preview-area" id="previewArea">
+        <div class="fake-site">
+          <div class="fake-nav">
+            <div class="fake-logo" id="fakeLogo">PowerPulse Gym</div>
+            <div class="fake-links">
+              <span>Home</span><span>Services</span><span>Contact</span>
+            </div>
+          </div>
+          <div class="fake-line" style="width:80%"></div>
+          <div class="fake-line" style="width:60%"></div>
+          <div class="fake-line" style="width:70%"></div>
+          <div class="fake-line" style="width:45%;margin-top:24px"></div>
+          <div class="fake-line" style="width:90%"></div>
+          <div class="fake-line" style="width:55%"></div>
+        </div>
+
+        <!-- Widget preview -->
+        <div id="widgetPreview" style="position:relative">
+          <div class="wa-popup hidden" id="popupPreview">
+            <div class="wa-popup-header" id="popupHeader" style="background:#075E54">
+              <div class="biz-name" id="popupName">PowerPulse Gym</div>
+              <div class="biz-tagline" id="popupTagline">Typically replies within minutes</div>
+              <button class="close-btn" onclick="document.getElementById('popupPreview').classList.add('hidden')">✕</button>
+            </div>
+            <div class="wa-popup-body">
+              <div class="wa-message">
+                <div id="popupMessage">Hey there! 💪 Welcome to PowerPulse Gym. How can we help you today?</div>
+                <div class="time">just now</div>
+              </div>
+            </div>
+            <div class="wa-popup-footer">
+              <button class="wa-cta-btn" id="popupCta" style="background:#25D366">
+                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.79 23.492l4.613-1.472A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-2.168 0-4.19-.587-5.932-1.61l-.424-.252-2.74.875.865-2.65-.278-.44A9.77 9.77 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.422 0 9.818 4.396 9.818 9.818 0 5.422-4.396 9.818-9.818 9.818z"/></svg>
+                <span id="popupCtaText">Start chat</span>
+              </button>
+            </div>
+          </div>
+          <div class="wa-fab" id="fabPreview" style="background:#25D366" onclick="document.getElementById('popupPreview').classList.toggle('hidden')">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.79 23.492l4.613-1.472A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-2.168 0-4.19-.587-5.932-1.61l-.424-.252-2.74.875.865-2.65-.278-.44A9.77 9.77 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.422 0 9.818 4.396 9.818 9.818 0 5.422-4.396 9.818-9.818 9.818z"/></svg>
+            <span class="wa-badge" id="badgePreview">1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE OUTPUT -->
+    <div class="code-section">
+      <div class="code-header">
+        <h3>Your embed code</h3>
+        <button class="copy-btn" onclick="copyCode(this)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy code
+        </button>
+      </div>
+      <div class="code-box">
+        <pre id="codeOutput"></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <h2>Why WAChat.in?</h2>
+  <p class="tagline">Built for Indian businesses. No compromises.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E8F5E9;color:var(--green)">⚡</div>
+      <h4>Zero dependencies</h4>
+      <p>Pure HTML/CSS/JS. No external scripts, no CDN calls. Your widget loads in under 50ms.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FFF3E0;color:#E65100">🇮🇳</div>
+      <h4>India-first design</h4>
+      <p>Pre-built templates for gyms, restaurants, salons, coaching centers, clinics, and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E3F2FD;color:#1565C0">📱</div>
+      <h4>WhatsApp-native UX</h4>
+      <p>Chat popup mimics real WhatsApp — familiar and trustworthy for your customers.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#FCE4EC;color:#C62828">🔒</div>
+      <h4>No watermark (free)</h4>
+      <p>Unlike Elfsight, our basic widget has zero branding. Your brand, your widget.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#F3E5F5;color:#6A1B9A">📊</div>
+      <h4>Click analytics <span class="pro-badge">PRO</span></h4>
+      <p>Track how many visitors click your widget, which pages convert best.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#E0F2F1;color:#00695C">👥</div>
+      <h4>Multi-agent <span class="pro-badge">PRO</span></h4>
+      <p>Route visitors to Sales, Support, or Trainer based on their selection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <h2>Simple, honest pricing</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="tier">Free forever</div>
+      <div class="amount">₹0</div>
+      <div class="desc">For personal sites & small businesses</div>
+      <ul>
+        <li>Unlimited widgets</li>
+        <li>Unlimited page views</li>
+        <li>No branding watermark</li>
+        <li>Self-hosted code</li>
+        <li>Chat popup with welcome message</li>
+        <li>Mobile-responsive</li>
+      </ul>
+      <a class="price-btn price-btn-outline" href="#builder">Generate free widget</a>
+    </div>
+    <div class="price-card featured">
+      <div class="popular">Most popular</div>
+      <div class="tier">Pro</div>
+      <div class="amount">₹199<span>/month</span></div>
+      <div class="desc">For growing businesses</div>
+      <ul>
+        <li>Everything in Free</li>
+        <li>Click & conversion analytics</li>
+        <li>Multi-agent department routing</li>
+        <li>Business hours display</li>
+        <li>Animated attention-grabber</li>
+        <li>A/B test widget placements</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="price-btn price-btn-primary">Start 14-day free trial</button>
+    </div>
+    <div class="price-card">
+      <div class="tier">Agency</div>
+      <div class="amount">₹499<span>/month</span></div>
+      <div class="desc">For agencies managing multiple clients</div>
+      <ul>
+        <li>Everything in Pro</li>
+        <li>Up to 50 client websites</li>
+        <li>White-label dashboard</li>
+        <li>Bulk widget management</li>
+        <li>Client analytics reports</li>
+        <li>API access</li>
+      </ul>
+      <button class="price-btn price-btn-outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>WAChat.in — Made with ❤️ in India. Built for businesses that run on WhatsApp.</p>
+</footer>
+
+<script>
+function toggleSwitch(el) {
+  el.classList.toggle('active');
+}
+
+function setDevice(type, btn) {
+  document.querySelectorAll('.preview-device button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const area = document.getElementById('previewArea');
+  if (type === 'mobile') area.classList.add('mobile-view');
+  else area.classList.remove('mobile-view');
+}
+
+function updateColor(val) {
+  document.getElementById('brandColorText').value = val;
+  document.getElementById('colorPreview').style.background = val;
+  updatePreview();
+}
+function updateColorFromText(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById('brandColor').value = val;
+    document.getElementById('colorPreview').style.background = val;
+    updatePreview();
+  }
+}
+
+function getDarkerColor(hex) {
+  let r = parseInt(hex.slice(1,3),16);
+  let g = parseInt(hex.slice(3,5),16);
+  let b = parseInt(hex.slice(5,7),16);
+  r = Math.round(r * 0.55);
+  g = Math.round(g * 0.55);
+  b = Math.round(b * 0.55);
+  return '#' + [r,g,b].map(c => c.toString(16).padStart(2,'0')).join('');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updatePreview() {
+  const num = document.getElementById('waNumber').value.trim();
+  const name = document.getElementById('bizName').value.trim();
+  const tagline = document.getElementById('bizTagline').value.trim();
+  const msg = document.getElementById('welcomeMsg').value.trim();
+  const prefill = document.getElementById('prefillMsg').value.trim();
+  const cta = document.getElementById('ctaText').value.trim();
+  const color = document.getElementById('brandColor').value;
+  const darkColor = getDarkerColor(color);
+  const showBadge = document.getElementById('toggleBadge').classList.contains('active');
+  const autoOpen = document.getElementById('toggleAutoOpen').classList.contains('active');
+
+  // Update preview
+  document.getElementById('fabPreview').style.background = color;
+  document.getElementById('popupHeader').style.background = darkColor;
+  document.getElementById('popupCta').style.background = color;
+  document.getElementById('popupName').textContent = name;
+  document.getElementById('popupTagline').textContent = tagline;
+  document.getElementById('popupMessage').textContent = msg;
+  document.getElementById('popupCtaText').textContent = cta;
+  document.getElementById('fakeLogo').textContent = name;
+  document.getElementById('badgePreview').style.display = showBadge ? 'flex' : 'none';
+
+  if (autoOpen) document.getElementById('popupPreview').classList.remove('hidden');
+  else document.getElementById('popupPreview').classList.add('hidden');
+
+  // Generate code
+  generateCode(num, name, tagline, msg, prefill, cta, color, darkColor, showBadge, autoOpen);
+}
+
+function generateCode(num, name, tagline, msg, prefill, cta, color, darkColor, showBadge, autoOpen) {
+  const waLink = `https://wa.me/${num}?text=${encodeURIComponent(prefill)}`;
+
+  const code = `<!-- WAChat.in WhatsApp Widget — Free -->
+<div id="wa-chat-widget" style="position:fixed;bottom:20px;right:20px;z-index:9999;font-family:-apple-system,sans-serif">
+  <div id="wa-popup" style="display:${autoOpen?'block':'none'};position:absolute;bottom:70px;right:0;width:320px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.12);overflow:hidden;animation:waSlideUp .25s ease">
+    <div style="padding:18px 20px;background:${darkColor};color:#fff">
+      <div style="font-weight:600;font-size:16px">${name}</div>
+      <div style="font-size:13px;opacity:.85;margin-top:2px">${tagline}</div>
+    </div>
+    <div style="padding:16px 20px;background:#e5ddd5">
+      <div style="background:#fff;padding:10px 14px;border-radius:0 8px 8px;font-size:14px;max-width:260px;box-shadow:0 1px 2px rgba(0,0,0,.06)">${msg}</div>
+    </div>
+    <div style="padding:12px 16px;background:#fff;border-top:1px solid #eee">
+      <a href="${waLink}" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;background:${color};color:#fff;border-radius:8px;text-decoration:none;font-weight:500;font-size:15px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.79 23.492l4.613-1.472A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-2.168 0-4.19-.587-5.932-1.61l-.424-.252-2.74.875.865-2.65-.278-.44A9.77 9.77 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.422 0 9.818 4.396 9.818 9.818 0 5.422-4.396 9.818-9.818 9.818z"/></svg>
+        ${cta}
+      </a>
+    </div>
+  </div>
+  <div onclick="document.getElementById('wa-popup').style.display=document.getElementById('wa-popup').style.display==='none'?'block':'none'" style="width:56px;height:56px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.15);transition:transform .2s" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.79 23.492l4.613-1.472A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818c-2.168 0-4.19-.587-5.932-1.61l-.424-.252-2.74.875.865-2.65-.278-.44A9.77 9.77 0 012.182 12c0-5.422 4.396-9.818 9.818-9.818 5.422 0 9.818 4.396 9.818 9.818 0 5.422-4.396 9.818-9.818 9.818z"/></svg>${showBadge ? '\n    <span style="position:absolute;top:-4px;right:-4px;width:20px;height:20px;background:#E8593C;color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff">1</span>' : ''}
+  </div>
+</div>
+<style>@keyframes waSlideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}</style>
+<!-- End WAChat.in Widget -->`;
+
+  const highlighted = escapeHtml(code)
+    .replace(/(&lt;\/?[a-z][^&]*?&gt;)/gi, '<span class="tag">$1</span>')
+    .replace(/(style|onclick|onmouseover|onmouseout|href|target|rel|id|width|height|viewBox|fill|d)=/g, '<span class="attr">$1</span>=');
+
+  document.getElementById('codeOutput').innerHTML = highlighted;
+  window._generatedCode = code;
+}
+
+function copyCode(btn) {
+  navigator.clipboard.writeText(window._generatedCode || '').then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy code';
+    }, 2000);
+  });
+}
+
+// Initialize
+updatePreview();
+</script>
+</body>
+</html>
